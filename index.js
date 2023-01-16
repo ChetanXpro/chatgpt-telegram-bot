@@ -27,13 +27,13 @@ const bot = new Telegraf(process.env.TG_API);
 connectDB();
 
 // Bot on start
-bot.start(async(ctx) => {
+bot.start(async (ctx) => {
   if (ctx.chat.type === "group") {
     logger.info(`Bot started In: ${ctx.chat.title} `);
   } else if (ctx.chat.type === "private") {
     logger.info(`Bot started By ${ctx.chat.username || ctx.chat.first_name} `);
   }
-  await checkAndSave(ctx)
+  await checkAndSave(ctx);
 
   ctx.reply(
     "Welcome To AI Bot 🧿 \n\nCommands 👾 \n/ask  ask anything from me \n/image to create image from text  \n/en to correct your grammer \n\n\nContract @Chetan_Baliyan if you want to report any BUG or change in features"
@@ -62,7 +62,7 @@ bot.command("image", async (ctx) => {
     } else {
       ctx.telegram.sendMessage(
         ctx.message.chat.id,
-        "I can't generate image for this text",
+        "I can't generate image for this text\n\nPlease use this bot for Educational Purposes , else you will be blocked by bot.",
         {
           reply_to_message_id: ctx.message.message_id,
         }
