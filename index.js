@@ -91,9 +91,13 @@ bot.command("ask", async (ctx) => {
     ctx.sendChatAction("typing");
     const res = await getChat(text);
     if (res) {
-      ctx.telegram.sendMessage(ctx.message.chat.id, res, {
-        reply_to_message_id: ctx.message.message_id,
-      });
+      ctx.telegram.sendMessage(
+        ctx.message.chat.id,
+        `${res}\n\n\nJoin us on Telegram\n@Open_ai_Channel`,
+        {
+          reply_to_message_id: ctx.message.message_id,
+        }
+      );
     }
   } else {
     ctx.telegram.sendMessage(
