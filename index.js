@@ -6,13 +6,12 @@ const {
 
   correctEngish,
 } = require("./Helper/functions");
-const User = require("./Model/user");
 
 const { Telegraf } = require("telegraf");
 const { default: axios } = require("axios");
 const logger = require("./Helper/logger");
 const connectDB = require("./Helper/db");
-const Group = require("./Model/groups");
+
 const checkAndSave = require("./Helper/saveToDb");
 
 const configuration = new Configuration({
@@ -81,7 +80,6 @@ bot.command("image", async (ctx) => {
 });
 
 //Bot on ask command
-
 bot.command("ask", async (ctx) => {
   const text = ctx.message.text?.replace("/ask", "")?.trim().toLowerCase();
 
