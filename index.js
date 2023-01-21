@@ -54,18 +54,27 @@ bot.command("image", async (ctx) => {
 
     if (res) {
       ctx.sendChatAction("upload_photo");
-
-      ctx.telegram.sendPhoto(ctx.message.chat.id, res, {
-        reply_to_message_id: ctx.message.message_id,
-      });
-    } else {
-      ctx.telegram.sendMessage(
-        ctx.message.chat.id,
-        "I can't generate image for this text\n\nPlease use this bot for Educational Purposes , else you will be blocked by bot.",
-        {
+      if (ctx.message.message_id) {
+        ctx.telegram.sendPhoto(ctx.message.chat.id, res, {
           reply_to_message_id: ctx.message.message_id,
-        }
-      );
+        });
+      } else {
+        ctx.sendPhoto(res);
+      }
+    } else {
+      if (ctx.message.message_id) {
+        ctx.telegram.sendMessage(
+          ctx.message.chat.id,
+          "I can't generate image for this text\n\nPlease use this bot for Educational Purposes , else you will be blocked by bot.",
+          {
+            reply_to_message_id: ctx.message.message_id,
+          }
+        );
+      } else {
+        ctx.sendMessage(
+          "I can't generate image for this text\n\nPlease use this bot for Educational Purposes , else you will be blocked by bot."
+        );
+      }
     }
   } else {
     ctx.telegram.sendMessage(
@@ -87,24 +96,33 @@ bot.command("ask", async (ctx) => {
 
   if (text) {
     ctx.sendChatAction("typing");
+
     const res = await getChat(text);
     if (res) {
+      if (ctx.message.message_id) {
+        ctx.telegram.sendMessage(
+          ctx.message.chat.id,
+          `${res}\n\n\nJoin us on Telegram\n@Open_ai_Channel`,
+          {
+            reply_to_message_id: ctx.message.message_id,
+          }
+        );
+      } else {
+        ctx.sendMessage(`${res}\n\n\nJoin us on Telegram\n@Open_ai_Channel`);
+      }
+    }
+  } else {
+    if (ctx.message.message_id) {
       ctx.telegram.sendMessage(
         ctx.message.chat.id,
-        `${res}\n\n\nJoin us on Telegram\n@Open_ai_Channel`,
+        "Please ask anything after /ask",
         {
           reply_to_message_id: ctx.message.message_id,
         }
       );
+    } else {
+      ctx.sendMessage("Please ask anything after /ask");
     }
-  } else {
-    ctx.telegram.sendMessage(
-      ctx.message.chat.id,
-      "Please ask anything after /ask",
-      {
-        reply_to_message_id: ctx.message.message_id,
-      }
-    );
   }
 
   await checkAndSave(ctx);
