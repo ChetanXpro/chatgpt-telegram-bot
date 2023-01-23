@@ -12,7 +12,13 @@ const { default: axios } = require("axios");
 const logger = require("./Helper/logger");
 const connectDB = require("./Helper/db");
 
+const { limit } = require("@grammyjs/ratelimiter");
+
 const checkAndSave = require("./Helper/saveToDb");
+const Redis = require("ioredis");
+// const { trusted } = require("mongoose");
+
+// import {} form '@gt'
 
 const configuration = new Configuration({
   apiKey: process.env.API,
@@ -25,6 +31,7 @@ const bot = new Telegraf(process.env.TG_API);
 
 connectDB();
 
+const redis = new Redis();
 // Bot on start
 bot.start(async (ctx) => {
   if (ctx.chat.type === "group") {
@@ -44,6 +51,24 @@ bot.help((ctx) => {
     "\nCommands 👾 \n\n/ask  ask anything from me \n/image to create image from text  \n/en to correct your grammer \n\n\nContract @Chetan_Baliyan if you want to report any BUG or change in features "
   );
 });
+
+bot.use(
+  limit({
+    timeFrame: 7000,
+    limit: 3,
+
+    onLimitExceeded: async (ctx) => {
+      logger.info(
+        `Limit Exceeded: ${ctx.from.username || ctx.from.first_name}`
+      );
+      await ctx.reply("Please Avoid sending too many REQUEST");
+    },
+
+    keyGenerator: (ctx) => {
+      return ctx.from?.id.toString();
+    },
+  })
+);
 
 //Bot on Image command
 bot.command("image", async (ctx) => {
@@ -131,7 +156,6 @@ bot.command("ask", async (ctx) => {
 // Bot on en command
 bot.command("en", async (ctx) => {
   const text = ctx.message.text?.replace("/en", "")?.trim().toLowerCase();
-
   if (text) {
     ctx.sendChatAction("typing");
     const res = await correctEngish(text);
