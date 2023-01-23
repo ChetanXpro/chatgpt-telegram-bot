@@ -15,10 +15,7 @@ const connectDB = require("./Helper/db");
 const { limit } = require("@grammyjs/ratelimiter");
 
 const checkAndSave = require("./Helper/saveToDb");
-const Redis = require("ioredis");
-// const { trusted } = require("mongoose");
 
-// import {} form '@gt'
 
 const configuration = new Configuration({
   apiKey: process.env.API,
@@ -31,7 +28,7 @@ const bot = new Telegraf(process.env.TG_API);
 
 connectDB();
 
-const redis = new Redis();
+
 // Bot on start
 bot.start(async (ctx) => {
   if (ctx.chat.type === "group") {
