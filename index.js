@@ -11,11 +11,11 @@ const { Telegraf } = require("telegraf");
 const { default: axios } = require("axios");
 const logger = require("./Helper/logger");
 const connectDB = require("./Helper/db");
+const OpenAiGroup = require("./Model/Aigroup");
 
 const { limit } = require("@grammyjs/ratelimiter");
 
 const checkAndSave = require("./Helper/saveToDb");
-
 
 const configuration = new Configuration({
   apiKey: process.env.API,
@@ -27,7 +27,6 @@ module.exports = openai;
 const bot = new Telegraf(process.env.TG_API);
 
 connectDB();
-
 
 // Bot on start
 bot.start(async (ctx) => {
@@ -67,10 +66,62 @@ bot.use(
   })
 );
 
+bot.on("new_chat_members", async (ctx) => {
+  console.log(ctx.update.message.chat.id);
+  if (ctx.update.message.chat.id.toString() !== "-1001745862327") return;
+  console.log(ctx.update.message.new_chat_member);
+
+  const foundUser = await OpenAiGroup.find({
+    userId: ctx.update.message.new_chat_member.id,
+  });
+ 
+
+  if (foundUser.length > 0) {
+    foundUser[0].member_left = false;
+    await foundUser.save();
+    return;
+  }
+
+  await OpenAiGroup.create({
+    userId: ctx.update.message.new_chat_member.id,
+    username: ctx.update.message.new_chat_member.username || "",
+    name: ctx.update.message.new_chat_member.first_name || "",
+    member_left: false,
+  });
+});
+
+bot.on("left_chat_member", async (ctx) => {
+  if (ctx.update.message.chat.id.toString() !== "-1001745862327") return;
+
+  await OpenAiGroup.findOneAndUpdate(
+    {
+      userId: ctx.update.message.left_chat_participant.id,
+    },
+    { member_left: true }
+  );
+});
+
 //Bot on Image command
 bot.command("image", async (ctx) => {
   const text = ctx.message.text?.replace("/image", "")?.trim().toLowerCase();
   logger.info(`Image: ${ctx.from.username || ctx.from.first_name}: ${text}`);
+  const foundUser = await OpenAiGroup.findOne({ userId: ctx.from.id });
+
+  if (!foundUser) {
+    if (ctx.message.message_id) {
+      ctx.telegram.sendMessage(
+        ctx.message.chat.id,
+        `Please join @OpenAl_Group before using this bot`,
+        {
+          reply_to_message_id: ctx.message.message_id,
+        }
+      );
+    } else {
+      ctx.sendMessage(`Please join @OpenAl_Group before using this bot`);
+    }
+
+    return;
+  }
   if (text) {
     const res = await getImage(text);
 
@@ -111,10 +162,28 @@ bot.command("image", async (ctx) => {
 });
 
 //Bot on ask command
+
 bot.command("ask", async (ctx) => {
   const text = ctx.message.text?.replace("/ask", "")?.trim().toLowerCase();
 
+  const foundUser = await OpenAiGroup.findOne({ userId: ctx.from.id });
+
   logger.info(`Chat: ${ctx.from.username || ctx.from.first_name}: ${text}`);
+  if (!foundUser || foundUser.member_left === true) {
+    if (ctx.message.message_id) {
+      ctx.telegram.sendMessage(
+        ctx.message.chat.id,
+        `Please join @OpenAl_Group before using this bot`,
+        {
+          reply_to_message_id: ctx.message.message_id,
+        }
+      );
+    } else {
+      ctx.sendMessage(`Please join @OpenAl_Group before using this bot`);
+    }
+
+    return;
+  }
 
   if (text) {
     ctx.sendChatAction("typing");
@@ -124,13 +193,13 @@ bot.command("ask", async (ctx) => {
       if (ctx.message.message_id) {
         ctx.telegram.sendMessage(
           ctx.message.chat.id,
-          `${res}\n\n\nJoin us on Telegram\n@Open_ai_Channel`,
+          `${res}`,
           {
             reply_to_message_id: ctx.message.message_id,
           }
         );
       } else {
-        ctx.sendMessage(`${res}\n\n\nJoin us on Telegram\n@Open_ai_Channel`);
+        ctx.sendMessage(`${res}`);
       }
     }
   } else {
@@ -153,6 +222,24 @@ bot.command("ask", async (ctx) => {
 // Bot on en command
 bot.command("en", async (ctx) => {
   const text = ctx.message.text?.replace("/en", "")?.trim().toLowerCase();
+  logger.info(`EN: ${ctx.from.username || ctx.from.first_name}: ${text}`);
+  const foundUser = await OpenAiGroup.findOne({ userId: ctx.from.id });
+
+  if (!foundUser) {
+    if (ctx.message.message_id) {
+      ctx.telegram.sendMessage(
+        ctx.message.chat.id,
+        `Please join @OpenAl_Group before using this bot`,
+        {
+          reply_to_message_id: ctx.message.message_id,
+        }
+      );
+    } else {
+      ctx.sendMessage(`Please join @OpenAl_Group before using this bot`);
+    }
+
+    return;
+  }
   if (text) {
     ctx.sendChatAction("typing");
     const res = await correctEngish(text);
@@ -175,6 +262,21 @@ bot.command("en", async (ctx) => {
 bot.command("yo", async (ctx) => {
   const text = ctx.message.text?.replace("/yo", "")?.trim().toLowerCase();
   logger.info(`Joke: ${ctx.from.username || ctx.from.first_name}: ${text}`);
+  if (!foundUser) {
+    if (ctx.message.message_id) {
+      ctx.telegram.sendMessage(
+        ctx.message.chat.id,
+        `Please join @OpenAl_Group before using this bot`,
+        {
+          reply_to_message_id: ctx.message.message_id,
+        }
+      );
+    } else {
+      ctx.sendMessage(`Please join @OpenAl_Group before using this bot`);
+    }
+
+    return;
+  }
 
   const ress = await axios.get("https://api.yomomma.info/");
 
