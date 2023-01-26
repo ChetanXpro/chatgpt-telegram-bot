@@ -67,18 +67,21 @@ bot.use(
 );
 
 bot.on("new_chat_members", async (ctx) => {
-  console.log(ctx.update.message.chat.id);
   if (ctx.update.message.chat.id.toString() !== "-1001745862327") return;
-  console.log(ctx.update.message.new_chat_member);
 
   const foundUser = await OpenAiGroup.find({
     userId: ctx.update.message.new_chat_member.id,
   });
- 
 
+  logger.info(
+    `Joined: ${
+      ctx.update.message.new_chat_member.username ||
+      ctx.update.message.new_chat_member.first_name
+    }`
+  );
   if (foundUser.length > 0) {
     foundUser[0].member_left = false;
-    await foundUser.save();
+    await foundUser[0].save();
     return;
   }
 
@@ -92,7 +95,12 @@ bot.on("new_chat_members", async (ctx) => {
 
 bot.on("left_chat_member", async (ctx) => {
   if (ctx.update.message.chat.id.toString() !== "-1001745862327") return;
-
+  logger.info(
+    `Group Left: ${
+      ctx.update.message.left_chat_participant.username ||
+      ctx.update.message.left_chat_participant.first_name
+    }`
+  );
   await OpenAiGroup.findOneAndUpdate(
     {
       userId: ctx.update.message.left_chat_participant.id,
@@ -191,13 +199,9 @@ bot.command("ask", async (ctx) => {
     const res = await getChat(text);
     if (res) {
       if (ctx.message.message_id) {
-        ctx.telegram.sendMessage(
-          ctx.message.chat.id,
-          `${res}`,
-          {
-            reply_to_message_id: ctx.message.message_id,
-          }
-        );
+        ctx.telegram.sendMessage(ctx.message.chat.id, `${res}`, {
+          reply_to_message_id: ctx.message.message_id,
+        });
       } else {
         ctx.sendMessage(`${res}`);
       }
