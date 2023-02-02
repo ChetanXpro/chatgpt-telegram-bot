@@ -14,3 +14,6 @@
 ### /en <YOUR_WRONG_GRAMMAR_ENGLISH>
  - You can send your sentence with wrong grammar bot will fix that.
  - /en i am going in my house roof
+ 
+ 
+Features: rate limit , saved users in mongoDB
