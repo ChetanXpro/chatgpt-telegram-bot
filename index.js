@@ -94,7 +94,7 @@ bot.on("new_chat_members", async (ctx) => {
 });
 
 bot.on("left_chat_member", async (ctx) => {
-  if (ctx.update.message.chat.id.toString() !== "-1001745862327") return;
+  if (ctx.update.message.chat.id.toString() !== process.env.GROUP_ID) return;
   logger.info(
     `Group Left: ${
       ctx.update.message.left_chat_participant.username ||
