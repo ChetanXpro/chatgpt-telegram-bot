@@ -1,12 +1,12 @@
 ## TELEGRAM BOT -> [@botOpenAI_Bot](https://t.me/botOpenAI_Bot)
 
+### How to install this bot ?
+
 - If You want to use database to store active users then use Main branch (You have to provide  mongoDb connection url)
 - or if you dont want to use database then checkout to other branch (no need to provide monogoDB connection url)
 
 
-### How to install this bot ?
-
-- Clone this repo.
+- Clone repo.
 - To enter in folder `cd Telegram-Ai-Bot`
 - To install all modules `npm install`
 - Enter Your API keys in .env files
