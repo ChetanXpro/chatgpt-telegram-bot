@@ -16,4 +16,4 @@
  - /en i am going in my house roof
  
  
-Features: rate limit , saved users in mongoDB, text to image , text reply
+
