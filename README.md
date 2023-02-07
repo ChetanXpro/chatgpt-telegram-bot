@@ -6,8 +6,7 @@
 - Or if you dont want to use database then checkout to other branch (no need to provide monogoDB connection url)
 
 
-- Clone repo.
-- To enter in folder `cd Telegram-Ai-Bot`
+- Clone This repo
 - To install all modules `npm install`
 - Enter Your API keys in .env files
 - To run developer server `npm run dev`
