@@ -48,6 +48,9 @@ bot.help((ctx) => {
   );
 });
 
+
+
+
 bot.use(
   limit({
     timeFrame: 7000,
@@ -74,9 +77,8 @@ bot.on("new_chat_members", async (ctx) => {
   });
 
   logger.info(
-    `Joined: ${
-      ctx.update.message.new_chat_member.username ||
-      ctx.update.message.new_chat_member.first_name
+    `Joined: ${ctx.update.message.new_chat_member.username ||
+    ctx.update.message.new_chat_member.first_name
     }`
   );
   if (foundUser.length > 0) {
@@ -96,9 +98,8 @@ bot.on("new_chat_members", async (ctx) => {
 bot.on("left_chat_member", async (ctx) => {
   if (ctx.update.message.chat.id.toString() !== process.env.GROUP_ID) return;
   logger.info(
-    `Group Left: ${
-      ctx.update.message.left_chat_participant.username ||
-      ctx.update.message.left_chat_participant.first_name
+    `Group Left: ${ctx.update.message.left_chat_participant.username ||
+    ctx.update.message.left_chat_participant.first_name
     }`
   );
   await OpenAiGroup.findOneAndUpdate(
@@ -292,5 +293,10 @@ bot.command("yo", async (ctx) => {
     });
   }
 });
+
+
+bot.catch((err, ctx) => {
+  logger.error('Error')
+})
 
 bot.launch();
