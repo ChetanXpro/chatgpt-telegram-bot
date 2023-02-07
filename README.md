@@ -2,13 +2,14 @@
 
 ### How to install this bot ?
 
-- If You want to use database to store active users then use Master branch (You have to provide  mongoDb connection url)
-- Or if you dont want to use database then checkout to bot-without-monogdb branch (no need to provide monogoDB connection url)
+- If You want to use database to store active users then use Master branch (You have to enter mongoDb connection url in .env)
+- Or if you dont want to use database then checkout to bot-without-monogdb branch (no need to enter monogoDB connection url in .env)
 
 
 - Clone This repo
-- To install all modules `npm install`
+- Create `.env` file in root
 - Enter Your API keys in .env files
+- To install all modules `npm install`
 - To run developer server `npm run dev`
 
 ### Env
