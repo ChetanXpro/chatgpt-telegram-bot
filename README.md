@@ -2,8 +2,8 @@
 
 ### How to install this bot ?
 
-- If You want to use database to store active users then use Main branch (You have to provide  mongoDb connection url)
-- Or if you dont want to use database then checkout to other branch (no need to provide monogoDB connection url)
+- If You want to use database to store active users then use Master branch (You have to provide  mongoDb connection url)
+- Or if you dont want to use database then checkout to bot-without-monogdb branch (no need to provide monogoDB connection url)
 
 
 - Clone This repo
