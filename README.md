@@ -3,7 +3,7 @@
 ### How to install this bot ?
 
 - If You want to use database to store active users then use Main branch (You have to provide  mongoDb connection url)
-- or if you dont want to use database then checkout to other branch (no need to provide monogoDB connection url)
+- Or if you dont want to use database then checkout to other branch (no need to provide monogoDB connection url)
 
 
 - Clone repo.
@@ -14,11 +14,11 @@
 
 ### Env
 
-- API=<YOUR_OPENAI_API>
-- TG_API=<YOUR_TELEGRAM_BOT_API>
+- `API=<YOUR_OPENAI_API>`
+- `TG_API=<YOUR_TELEGRAM_BOT_API>`
 
 - Need only if you want to save data to mongo Database
-- URI=<YOUR_MONOGDB_URI>
+- `URI=<YOUR_MONOGDB_URI>`
 
 ## Commands 
 
