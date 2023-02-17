@@ -302,19 +302,19 @@ bot.command('speech', async (ctx) => {
     const text = ctx.message.text?.replace("/speech", "")?.trim().toLowerCase();
     logger.info(`Speech: ${ctx.from.username || ctx.from.first_name}: ${text}`);
 
-    // if (ctx.update.message.chat.id.toString() === "-1001745862327") {
+    if (ctx.update.message.chat.id.toString() === "-1001745862327") {
 
       ctx.sendChatAction('upload_voice')
     
       const result = await speak(text, ctx)
-    // } else {
+    } else {
 
 
-      // ctx.sendMessage(`You can use this text to speech feature in @OpenAl_Group `);
+      ctx.sendMessage(`You can only use this text to speech feature in @OpenAl_Group `);
 
 
 
-    // }
+    }
   } catch (error) {
     logger.error('Error in Speech')
   }
