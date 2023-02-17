@@ -298,12 +298,44 @@ bot.command("yo", async (ctx) => {
 
 
 bot.command('speech', async (ctx) => {
-  const text = ctx.message.text?.replace("/s", "")?.trim().toLowerCase();
+  try {
+    const text = ctx.message.text?.replace("/speech", "")?.trim().toLowerCase();
+    logger.info(`Speech: ${ctx.from.username || ctx.from.first_name}: ${text}`);
 
-  const result = await speak(text, ctx)
+    // if (ctx.update.message.chat.id.toString() === "-1001745862327") {
+
+      ctx.sendChatAction('upload_voice')
+    
+      const result = await speak(text, ctx)
+    // } else {
+
+
+      // ctx.sendMessage(`You can use this text to speech feature in @OpenAl_Group `);
+
+
+
+    // }
+  } catch (error) {
+    logger.error('Error in Speech')
+  }
+
 
 })
 
+
+bot.command('reset_pending', async (ctx) => {
+  const res = await axios.post(`https://api.telegram.org/bot${process.env.TG_API}/getWebhookInfo`)
+
+  if (res.data) {
+    if (res.data.result.pending_update_count) {
+      ctx.reply(`Reset Pending Update ${res.data.result.pending_update_count}`)
+      const res = await axios.post(`https://api.telegram.org/bot${process.env.TG_API}/setWebhook?drop_pending_updates=true`)
+      return res.data?.ok === true ? ctx.reply('Reset done') : ''
+    } else {
+      ctx.reply(`Pending Update ${res.data.result.pending_update_count}`)
+    }
+  }
+})
 
 bot.catch((err, ctx) => {
   logger.error('Error', err)

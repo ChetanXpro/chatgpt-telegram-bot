@@ -66,7 +66,7 @@ const correctEngish = async (text) => {
 const speak = async (text, ctx) => {
   try {
     const speechConfig = sdk.SpeechConfig.fromSubscription(process.env.SPEECH_KEY, process.env.SPEECH_REGION);
-    const audioConfig = sdk.AudioConfig.fromAudioFileOutput(`${ ctx.chat.username || ctx.chat.first_name}.mp3`);
+    const audioConfig = sdk.AudioConfig.fromAudioFileOutput(`${ctx.chat.username || ctx.chat.first_name}.mp3`);
     speechConfig.speechSynthesisVoiceName = "hi-IN-SwaraNeural";
     speechConfig.speechSynthesisOutputFormat = 5;
 
@@ -79,11 +79,33 @@ const speak = async (text, ctx) => {
       async result => {
         synthesizer.close();
         if (result) {
-          fs.createReadStream(`${ ctx.chat.username || ctx.chat.first_name}.mp3`)
 
-          await ctx.replyWithAudio({ source: `${ ctx.chat.username || ctx.chat.first_name}.mp3` })
 
-          await unlink(`${ ctx.chat.username || ctx.chat.first_name}.mp3`)
+
+
+          await fs.createReadStream(`${ctx.chat.username || ctx.chat.first_name}.mp3`)
+
+          fs.stat(`${ctx.chat.username || ctx.chat.first_name}.mp3`, async (err, stats) => {
+            if (err) {
+              return await ctx.sendMessage('Please enter text in english or hindi')
+            } else {
+              console.log(stats.size)
+              if (stats.size) {
+                await ctx.replyWithAudio({ source: `${ctx.chat.username || ctx.chat.first_name}.mp3` })
+
+                // ctx.telegram.sendAudio(ctx.message.chat.id,'')
+                await unlink(`${ctx.chat.username || ctx.chat.first_name}.mp3`)
+              } else {
+                await ctx.sendMessage('Error while generating audio\nOnly use hindi or enlgish language \nPlease contract owner @Chetan_Baliyan')
+                await unlink(`${ctx.chat.username || ctx.chat.first_name}.mp3`)
+              }
+
+
+              // return await unlink(`${ctx.chat.username || ctx.chat.first_name}.mp3`)
+            }
+          })
+
+
         }
       },
       error => {
