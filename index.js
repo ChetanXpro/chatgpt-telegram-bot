@@ -5,6 +5,7 @@ const {
   getChat,
 
   correctEngish,
+  speak,
 } = require("./Helper/functions");
 
 const { Telegraf } = require("telegraf");
@@ -295,8 +296,19 @@ bot.command("yo", async (ctx) => {
 });
 
 
-bot.catch((err, ctx) => {
-  logger.error('Error')
+
+bot.command('speech', async (ctx) => {
+  const text = ctx.message.text?.replace("/s", "")?.trim().toLowerCase();
+
+  const result = await speak(text, ctx)
+
 })
+
+
+bot.catch((err, ctx) => {
+  logger.error('Error', err)
+})
+
+
 
 bot.launch();

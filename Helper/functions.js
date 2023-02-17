@@ -1,5 +1,13 @@
 const { Configuration, OpenAIApi } = require("openai");
 const logger = require("./logger");
+var sdk = require("microsoft-cognitiveservices-speech-sdk");
+const { Stream } = require("microsoft-cognitiveservices-speech-sdk/distrib/lib/src/common/Stream");
+
+PassThroughStream = require('stream').PassThrough
+const fs = require('fs')
+
+// import { unlink } from 'node:fs/promises';
+const { unlink } = require('node:fs/promises')
 
 const configuration = new Configuration({
   apiKey: process.env.API,
@@ -54,4 +62,43 @@ const correctEngish = async (text) => {
   }
 };
 
-module.exports = { openai, getImage, getChat, correctEngish };
+
+const speak = async (text, ctx) => {
+  try {
+    const speechConfig = sdk.SpeechConfig.fromSubscription(process.env.SPEECH_KEY, process.env.SPEECH_REGION);
+    const audioConfig = sdk.AudioConfig.fromAudioFileOutput(`${ ctx.chat.username || ctx.chat.first_name}.mp3`);
+    speechConfig.speechSynthesisVoiceName = "hi-IN-SwaraNeural";
+    speechConfig.speechSynthesisOutputFormat = 5;
+
+
+    var synthesizer = new sdk.SpeechSynthesizer(speechConfig, audioConfig)
+
+
+    synthesizer.speakTextAsync(
+      text,
+      async result => {
+        synthesizer.close();
+        if (result) {
+          fs.createReadStream(`${ ctx.chat.username || ctx.chat.first_name}.mp3`)
+
+          await ctx.replyWithAudio({ source: `${ ctx.chat.username || ctx.chat.first_name}.mp3` })
+
+          await unlink(`${ ctx.chat.username || ctx.chat.first_name}.mp3`)
+        }
+      },
+      error => {
+        console.log(error);
+        synthesizer.close();
+      });
+
+
+
+
+    // synthesizer.close();
+  } catch (error) {
+    console.log(error)
+    synthesizer.close();
+  }
+}
+
+module.exports = { openai, getImage, getChat, correctEngish, speak };

@@ -14,6 +14,7 @@
     "@grammyjs/ratelimiter": "^1.1.6",
     "axios": "^1.2.2",
     "dotenv": "^16.0.3",
+    "microsoft-cognitiveservices-speech-sdk": "^1.25.0",
     "mongoose": "^6.8.3",
     "nodemon": "^2.0.20",
     "openai": "^3.1.0",
