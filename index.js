@@ -302,6 +302,8 @@ bot.command('speech', async (ctx) => {
     const text = ctx.message.text?.replace("/speech", "")?.trim().toLowerCase();
     logger.info(`Speech: ${ctx.from.username || ctx.from.first_name}: ${text}`);
 
+    if(!text) return ctx.reply('Give text for this command')
+
     if (ctx.update.message.chat.id.toString() === "-1001745862327") {
 
       ctx.sendChatAction('upload_voice')
