@@ -28,6 +28,7 @@
 
 ### /speech <YOUR_TEXT>
 - Bot will generate Audio for your text
+- ex-> /speech hi how are you
 
 
 ### /image <IMAGE_DESCRIPTION>
