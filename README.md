@@ -26,6 +26,9 @@
 - With this command you can ask anything from bot.
 - ex-> /ask what is utf-8 encoding
 
+### /speech <YOUR_TEXT>
+- Bot will generate Audio for your text
+
 
 ### /image <IMAGE_DESCRIPTION>
  - You can give a description to generate an image
