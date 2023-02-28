@@ -16,6 +16,7 @@
 
 - `API=<YOUR_OPENAI_API>`
 - `TG_API=<YOUR_TELEGRAM_BOT_API>`
+- `AZURE_API=<YOUR_AZURE_TEXT_TO_AUDIO_API>`
 
 - Need only if you want to save data to mongo Database
 - `URI=<YOUR_MONOGDB_URI>`
