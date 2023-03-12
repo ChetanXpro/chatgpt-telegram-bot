@@ -1,6 +1,6 @@
 import { Telegraf } from 'telegraf';
 
-import { about } from './commands';
+import { about, chat } from './commands';
 import { greeting } from './text';
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { development, production } from './core';
@@ -12,7 +12,10 @@ const bot = new Telegraf(BOT_TOKEN);
 
 bot.command('about', about());
 
+bot.command('ask', chat())
+
 bot.on('message', greeting());
+
 
 bot.start(greeting());
 

@@ -36,6 +36,7 @@ const getChat = async (text: any) => {
     try {
         const response = await openai.createCompletion({
             model: "text-davinci-003",
+            
             prompt: text,
             temperature: 0,
             max_tokens: 500,

@@ -6,10 +6,12 @@ const connectDB = async () => {
     try {
         mongoose.set('strictQuery', false)
         const { connection } = await mongoose.connect(process.env.URI || '');
-        console.log('DB connected');
+        // console.log('DB connected');
 
         // logger.log(`Database connected `);
-    } catch (error) { }
+    } catch (error) {
+        console.log(error)
+    }
 };
 
-module.exports = connectDB;
+export { connectDB }

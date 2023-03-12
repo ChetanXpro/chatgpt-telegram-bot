@@ -15,6 +15,7 @@ const about = () => async (ctx: Context) => {
 
 const chat = () => async (ctx: any) => {
   const text = ctx?.message?.text.replace("/ask", "")?.trim().toLowerCase();
+  console.log(text)
 
   const foundUser = await OpenAiGroup.findOne({ userId: ctx?.from?.id });
 
@@ -69,4 +70,5 @@ const chat = () => async (ctx: any) => {
 
 
 
-export { about };
+
+export { about ,chat};

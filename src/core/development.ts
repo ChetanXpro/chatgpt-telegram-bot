@@ -1,6 +1,7 @@
 import { Context, Telegraf } from 'telegraf';
 import { Update } from 'telegraf/typings/core/types/typegram';
 import createDebug from 'debug';
+import { connectDB } from '../helper/db';
 
 const debug = createDebug('bot:dev');
 
@@ -12,8 +13,9 @@ const development = async (bot: Telegraf<Context<Update>>) => {
   await bot.telegram.deleteWebhook();
   debug(`${botInfo} starting polling`);
 
+  await connectDB()
+  debug(`Database connected`);
   await bot.launch();
-
   process.once('SIGINT', () => bot.stop('SIGINT'));
   process.once('SIGTERM', () => bot.stop('SIGTERM'));
 };
