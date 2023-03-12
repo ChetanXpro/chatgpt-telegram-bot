@@ -1,4 +1,6 @@
-const mongoose = require("mongoose");
+
+import mongoose from 'mongoose'
+
 
 const Schema = new mongoose.Schema({
   groupId: { type: String },
@@ -7,4 +9,5 @@ const Schema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Groups", Schema);
+const Group = mongoose.model("Groups", Schema);
+export { Group }

@@ -1,4 +1,6 @@
-const mongoose = require("mongoose");
+// import mongoose = require("mongoose");
+import mongoose from 'mongoose'
+
 
 const Schema = new mongoose.Schema({
   userId: { type: String },
@@ -12,4 +14,5 @@ const Schema = new mongoose.Schema({
   groups: { type: Array },
 });
 
-module.exports = mongoose.model("Users", Schema);
+const User = mongoose.model("Users", Schema);
+export { User }
