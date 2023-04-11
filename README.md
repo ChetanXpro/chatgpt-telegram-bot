@@ -2,7 +2,7 @@
 
 ### How to install this bot ?
 
-- If You want to use database to store active users then use Master branch (You have to enter mongoDb connection url in .env)
+- If You want to use extra features like speech service and database to store active users then use Master branch (You have to enter mongoDb connection url in .env)
 - Or if you dont want to use database then checkout to bot-without-monogdb branch (no need to enter monogoDB connection url in .env)
 
 
