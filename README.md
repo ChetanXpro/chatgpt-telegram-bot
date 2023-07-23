@@ -1,4 +1,4 @@
-## TELEGRAM BOT : [@botOpenAI_Bot](https://t.me/botOpenAI_Bot) (Currently offline)
+## TELEGRAM BOT : [@botOpenAI_Bot](https://t.me/botOpenAI_Bot) (offline)
 
 ### How to install this bot ?
 
